@@ -82,7 +82,7 @@ export default (props: any) => {
     erpc.eth_gasPrice().then(setGasPrice);
   }, [erpc]);
 
-  if (!blocks || !chainId || !gasPrice || !peerCount) {
+  if (blocks === undefined || chainId === undefined || gasPrice === undefined || peerCount === undefined) {
     return <CircularProgress />;
   }
 

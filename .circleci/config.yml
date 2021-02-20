@@ -56,8 +56,6 @@ jobs:
       - run: npm install
       - run: npm run build
       - run: npm install semantic-release @semantic-release/changelog @semantic-release/git @semantic-release/github @semantic-release/npm @semantic-release/commit-analyzer @semantic-release/release-notes-generator @qiwi/semantic-release-gh-pages-plugin
-      - setup_remote_docker:
-          docker_layer_caching: true
       - run: ./node_modules/.bin/semantic-release
       - save_cache: *save-deps-cache
 

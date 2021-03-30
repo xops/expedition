@@ -15,6 +15,7 @@ import Brightness3Icon from "@material-ui/icons/Brightness3";
 import NotesIcon from "@material-ui/icons/Notes";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import CodeIcon from "@material-ui/icons/Code";
+import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
 import useInterval from "use-interval";
 import ETHJSONSpec from "@etclabscore/ethereum-json-rpc-specification/openrpc.json";
 import { useTranslation } from "react-i18next";
@@ -30,6 +31,7 @@ import MinerStatsPage from "./containers/MinerStatsPage";
 import { Chain } from "./models/chain";
 import useChainListStore from "./stores/useChainListStore";
 import useEthRPCStore from "./stores/useEthRPCStore";
+import AddChain from "./components/AddChain/AddChain";
 
 const history = createPreserveQueryHistory(createBrowserHistory, ["network", "rpcUrl"])();
 
@@ -42,6 +44,8 @@ function App(props: any) {
   const [selectedChain, setSelectedChain] = useState<Chain>();
   const [chains, setChains] = useChainListStore<[Chain[], Dispatch<Chain[]>]>();
   const [ethRPC, setEthRPCChain] = useEthRPCStore();
+
+  const [addChainDialogIsOpen, setAddChainDialogIsOpen] = useState<boolean>(false);
 
   // default the selectedChain once chain list loads
   useEffect(() => {
@@ -170,6 +174,20 @@ function App(props: any) {
     }
   };
 
+  const openAddChainModal = () => {
+    setAddChainDialogIsOpen(true);
+  }
+
+  const cancelAddChainDialog = () => {
+    setAddChainDialogIsOpen(false);
+  };
+
+  const submitAddChainDialog = (c: Chain) => {
+    setAddChainDialogIsOpen(false);
+    setChains(chains.concat(c));
+    setSelectedChain(c);
+  };
+
   return (
     <Router history={history}>
       <ThemeProvider theme={theme}>
@@ -233,6 +251,11 @@ function App(props: any) {
                                    onChange={setSelectedChain}
                                    selected={selectedChain} />
                 : <CircularProgress />}
+                <Tooltip title={t("Add custom chain") as string}>
+                  <IconButton onClick={openAddChainModal}>
+                    <PlaylistAddIcon />
+                  </IconButton>
+                </Tooltip>
                 <LanguageMenu />
                 <Tooltip title={t("JSON-RPC API Documentation") as string}>
                   <IconButton
@@ -259,6 +282,11 @@ function App(props: any) {
             </Grid>
           </Toolbar>
         </AppBar>
+        <AddChain
+          open={addChainDialogIsOpen}
+          onCancel={cancelAddChainDialog}
+          onSubmit={submitAddChainDialog}
+        />
         <div style={{ margin: "0px 25px 0px 25px" }}>
           <QueryParamProvider ReactRouterRoute={Route}>
             <CssBaseline />

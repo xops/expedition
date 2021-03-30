@@ -1,13 +1,19 @@
 import ERPC from "@etclabscore/ethereum-json-rpc";
-import React from "react";
+import React, { Dispatch } from "react";
 import { Chain } from "../models/chain";
 
-function useEthRPC(chains: Chain[]): [ERPC] {
+function useEthRPC(): [ERPC, Dispatch<Chain>] {
   const [erpc, setErpc] = React.useState<ERPC>();
   const [selectedChain, setSelectedChain] = React.useState<Chain>();
 
   React.useEffect(() => {
-    const urlToUse = 
+    if (selectedChain === undefined) { return; }
+
+    const rpcUrl = selectedChain.rpc.reduce((curr, toCheck) => {
+      if (curr !== selectedChain.rpc[0]) { return curr; }
+      if (toCheck.indexOf("${") !== -1) { return curr; }
+      return toCheck;
+    }, selectedChain.rpc[0]);
 
     const runAsync = async () => {
       let parsedUrl;
@@ -44,7 +50,7 @@ function useEthRPC(chains: Chain[]): [ERPC] {
       }
     };
     // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [chains]);
+  }, [selectedChain]);
 
   return [erpc as ERPC, setSelectedChain];
 }

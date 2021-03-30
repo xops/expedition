@@ -2,8 +2,7 @@ import { CircularProgress } from "@material-ui/core";
 import * as React from "react";
 import { useBlockNumber } from "../helpers";
 import BlockList from "./BlockList";
-import useCoreGethStore from "../stores/useCoreGethStore";
-import EthereumJSONRPC from "@etclabscore/ethereum-json-rpc";
+import useEthRPCStore from "../stores/useEthRPCStore";
 import { useParams } from "react-router-dom";
 
 interface IUrlParams {
@@ -11,7 +10,7 @@ interface IUrlParams {
 }
 
 export default function NodeView(props: any) {
-  const [erpc]: [EthereumJSONRPC, any] = useCoreGethStore();
+  const [erpc] = useEthRPCStore();
   const [blockNumber] = useBlockNumber(erpc);
   const urlParams = useParams<IUrlParams>();
 

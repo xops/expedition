@@ -17,7 +17,6 @@ import NotesIcon from "@material-ui/icons/Notes";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import CodeIcon from "@material-ui/icons/Code";
 import useInterval from "use-interval";
-import useEthRPCStore from "./stores/useEthRPCStore";
 import EthereumJSONRPC from "@etclabscore/ethereum-json-rpc";
 import ETHJSONSpec from "@etclabscore/ethereum-json-rpc-specification/openrpc.json";
 import { useTranslation } from "react-i18next";
@@ -30,9 +29,9 @@ import BlockRawContainer from "./containers/BlockRawContainer";
 import TransactionRawContainer from "./containers/TransactionRawContainer";
 import expeditionLogo from "./expedition.png";
 import MinerStatsPage from "./containers/MinerStatsPage";
-import useChainList from "./hooks/useChainList";
 import { Chain } from "./models/chain";
 import useChainListStore from "./stores/useChainListStore";
+import useEthRPCStore from "./stores/useEthRPCStore";
 
 const history = createPreserveQueryHistory(createBrowserHistory, ["network", "rpcUrl"])();
 
@@ -43,8 +42,10 @@ function App(props: any) {
   const theme = darkMode.value ? darkTheme : lightTheme;
 
   const [selectedChain, setSelectedChain] = useState<Chain>();
-  const chains = useChainListStore<Chain[]>();
+  const [chains, setChains] = useChainListStore<[Chain[], Dispatch<Chain[]>]>();
+  const [ethRPC, setEthRPCChain] = useEthRPCStore();
 
+  // default the selectedChain once chain list loads
   useEffect(() => {
     if (selectedChain !== undefined) { return; }
     if (chains === undefined) { return; }
@@ -53,17 +54,13 @@ function App(props: any) {
     setSelectedChain(chains[0]);
   }, [chains]);
 
-  const ethRPC = useEthRPCStore<EthereumJSONRPC>();
-
   const [query, setQuery] = useQueryParams({
     network: StringParam,
     rpcUrl: StringParam,
   });
 
-  const setSelectedChain = async (chain: any) => {
-    setSelectedChainState(chain);
-  };
-
+  // when url param is used to pick network,
+  // keep things updated once chains list is loaded
   useEffect(() => {
     if (!chains || chains.length === 0) {
       return;
@@ -71,15 +68,23 @@ function App(props: any) {
     if (query.rpcUrl) {
       return;
     }
+
+    if (query.network && selectedChain !== undefined) {
+      if (query.network === selectedChain.name) {
+        return;
+      }
+    }
+
     if (chains && query.network) {
-      const foundNetwork = chains.find((chain) => chain.name === query.network);
-      setSelectedChainState(foundNetwork);
+      const foundChain = chains.find((chain: Chain) => chain.name === query.network);
+      setSelectedChain(foundChain);
     } else {
-      setSelectedChainState(chains[0]);
+      setSelectedChain(chains[0]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [chains, query.network]);
 
+  // keeps the window.location in sync with selected network
   useEffect(() => {
     if (selectedChain === undefined) {
       return;
@@ -95,6 +100,13 @@ function App(props: any) {
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChain, setQuery]);
+
+  // keep selected chain in sync with the current ethrpc instance
+  useEffect(() => {
+    if (selectedChain !== undefined) {
+      setEthRPCChain(selectedChain);
+    }
+  }, [selectedChain]);
 
   React.useEffect(() => {
     if (ethRPC) {

@@ -1,20 +1,25 @@
 import { CircularProgress } from "@material-ui/core";
-import useCoreGethStore from "../stores/useCoreGethStore";
+import useEthRPCStore from "../stores/useEthRPCStore";
 import * as React from "react";
 import BlockView from "../components/BlockView";
 import EthereumJSONRPC, { Block as IBlock } from "@etclabscore/ethereum-json-rpc";
 
-export default function Block(props: any) {
+export default async function Block(props: any) {
   const { match: { params: { hash } } } = props;
-  const [erpc]: [EthereumJSONRPC, any] = useCoreGethStore();
   const [block, setBlock] = React.useState<IBlock>();
+  let ethrpc: EthereumJSONRPC | undefined  = undefined;
+
   React.useEffect(() => {
-    if (!erpc) { return; }
-    erpc.eth_getBlockByHash(hash, true).then((b) => {
+    if (ethrpc === undefined) { return; }
+    ethrpc.eth_getBlockByHash(hash, true).then((b) => {
       if (b === null) { return; }
       setBlock(b);
     });
-  }, [hash, erpc]);
+  }, [hash, ethrpc]);
+
+  const erpc = await useEthRPCStore();
+  if (erpc === undefined) { return; }
+  [ethrpc] = erpc;
   if (!block) { return (<CircularProgress />); }
   return (<BlockView block={block} />);
 }

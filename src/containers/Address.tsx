@@ -3,7 +3,7 @@ import * as React from "react";
 import AddressView from "../components/AddressView";
 import _ from "lodash";
 import getBlocks, { useBlockNumber } from "../helpers";
-import useCoreGethStore from "../stores/useCoreGethStore";
+import useEthRPCStore from "../stores/useEthRPCStore";
 import EthereumJSONRPC from "@etclabscore/ethereum-json-rpc";
 import { hexToNumber } from "@etclabscore/eserialize";
 import AddressTransactions from "../components/AddressTransactions";
@@ -22,10 +22,10 @@ interface IProps {
   history: History;
 }
 
-const Address: React.FC<IProps> = ({ match, history }) => {
+const Address: React.FC<IProps> = async ({ match, history }) => {
   const { address, block } = match.params;
-  const [erpc]: [EthereumJSONRPC, any] = useCoreGethStore();
-  const [blockNumber] = useBlockNumber(erpc);
+  const erpc = useEthRPCStore();
+  const [blockNumber] = useBlockNumber(await erpc);
   const [transactionCount, setTransactionCount] = React.useState<string>();
   const [balance, setBalance] = React.useState<string>();
   const [code, setCode] = React.useState<string>();

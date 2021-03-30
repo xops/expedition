@@ -1,5 +1,5 @@
 import { Grid, Typography, CircularProgress, Theme, Button } from "@material-ui/core";
-import useCoreGethStore from "../stores/useCoreGethStore";
+import useEthRPCStore from "../stores/useEthRPCStore";
 import * as React from "react";
 import { weiToGwei } from "../components/formatters";
 import HashRate from "../components/HashRate";

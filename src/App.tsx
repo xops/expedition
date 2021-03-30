@@ -1,4 +1,4 @@
-import { AppBar, CssBaseline, Toolbar, Typography, IconButton, Grid, InputBase, Tooltip } from "@material-ui/core";
+import { AppBar, CssBaseline, Toolbar, Typography, IconButton, Grid, InputBase, Tooltip, CircularProgress } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import Link from "@material-ui/core/Link";
 import React, { Dispatch, ChangeEvent, KeyboardEvent, useState, useEffect } from "react";
@@ -16,24 +16,23 @@ import Brightness3Icon from "@material-ui/icons/Brightness3";
 import NotesIcon from "@material-ui/icons/Notes";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import CodeIcon from "@material-ui/icons/Code";
-import ServiceRunner, { ObjectOfStringDoaGddGAStringVp8AIgHFStringDoaGddGAUnorderedSetOfObjectOfStringDoaGddGAStringDoaGddGAKieCSt44UIuKSje3YY1BLmC3 as IAvailableServices } from "@etclabscore/jade-service-runner-client"; //tslint:disable-line
-import availableServiceToNetwork from "./helpers/availableServiceToNetwork";
-
 import useInterval from "use-interval";
-import useServiceRunnerStore from "./stores/useServiceRunnerStore";
-import useCoreGethStore from "./stores/useCoreGethStore";
+import useEthRPCStore from "./stores/useEthRPCStore";
 import EthereumJSONRPC from "@etclabscore/ethereum-json-rpc";
 import ETHJSONSpec from "@etclabscore/ethereum-json-rpc-specification/openrpc.json";
 import { useTranslation } from "react-i18next";
 import LanguageMenu from "./containers/LanguageMenu";
 import { createBrowserHistory } from "history";
-import NetworkDropdown from "./components/NetworkDropdown/NetworkDropdown";
+import ChainDropdown from "./components/ChainDropdown/ChainDropdown";
 import { StringParam, QueryParamProvider, useQueryParams } from "use-query-params";
 import { createPreserveQueryHistory } from "./helpers/createPreserveHistory";
 import BlockRawContainer from "./containers/BlockRawContainer";
 import TransactionRawContainer from "./containers/TransactionRawContainer";
 import expeditionLogo from "./expedition.png";
 import MinerStatsPage from "./containers/MinerStatsPage";
+import useChainList from "./hooks/useChainList";
+import { Chain } from "./models/chain";
+import useChainListStore from "./stores/useChainListStore";
 
 const history = createPreserveQueryHistory(createBrowserHistory, ["network", "rpcUrl"])();
 
@@ -43,53 +42,49 @@ function App(props: any) {
   const [search, setSearch] = useState();
   const theme = darkMode.value ? darkTheme : lightTheme;
 
-  const [selectedNetwork, setSelectedNetworkState] = useState();
-  const [serviceRunner, serviceRunnerUrl, setServiceRunnerUrl, availableServices]: [ServiceRunner, string, any, IAvailableServices[]] = useServiceRunnerStore(); //tslint:disable-line
-  const [erpc, setCoreGethUrlOverride]: [EthereumJSONRPC, Dispatch<string>] = useCoreGethStore();
-  const [networks, setNetworks] = useState<any[]>([]);
+  const [selectedChain, setSelectedChain] = useState<Chain>();
+  const chains = useChainListStore<Chain[]>();
+
+  useEffect(() => {
+    if (selectedChain !== undefined) { return; }
+    if (chains === undefined) { return; }
+    if (chains.length === 0) { return; }
+
+    setSelectedChain(chains[0]);
+  }, [chains]);
+
+  const ethRPC = useEthRPCStore<EthereumJSONRPC>();
 
   const [query, setQuery] = useQueryParams({
     network: StringParam,
     rpcUrl: StringParam,
   });
 
-  const setSelectedNetwork = async (network: any) => {
-    setSelectedNetworkState(network);
-    if (network.service) {
-      await serviceRunner.installService(network.service.name, network.service.version);
-      await serviceRunner.startService(network.service.name, network.service.version, network.name);
-    }
-    setCoreGethUrlOverride(network.url);
+  const setSelectedChain = async (chain: any) => {
+    setSelectedChainState(chain);
   };
 
   useEffect(() => {
-    if (availableServices && serviceRunnerUrl) {
-      const n = availableServiceToNetwork(availableServices, serviceRunnerUrl);
-      setNetworks(n);
-    }
-  }, [availableServices, serviceRunnerUrl]);
-
-  useEffect(() => {
-    if (!networks || networks.length === 0) {
+    if (!chains || chains.length === 0) {
       return;
     }
     if (query.rpcUrl) {
       return;
     }
-    if (networks && query.network) {
-      const foundNetwork = networks.find((net) => net.name === query.network);
-      setSelectedNetworkState(foundNetwork);
+    if (chains && query.network) {
+      const foundNetwork = chains.find((chain) => chain.name === query.network);
+      setSelectedChainState(foundNetwork);
     } else {
-      setSelectedNetworkState(networks[0]);
+      setSelectedChainState(chains[0]);
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [networks, query.network]);
+  }, [chains, query.network]);
 
   useEffect(() => {
-    if (selectedNetwork === undefined) {
+    if (selectedChain === undefined) {
       return;
     }
-    const { name } = selectedNetwork as any;
+    const { name } = selectedChain as Chain;
 
     if (name !== query.network) {
       setQuery({ network: name });
@@ -99,26 +94,18 @@ function App(props: any) {
       });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
-  }, [selectedNetwork, setQuery]);
-
-  const handleConfigurationChange = (type: string, url: string) => {
-    if (type === "service-runner") {
-      setServiceRunnerUrl(url);
-    } else if (type === "ethereum-rpc") {
-      setCoreGethUrlOverride(url);
-    }
-  };
+  }, [selectedChain, setQuery]);
 
   React.useEffect(() => {
-    if (erpc) {
-      erpc.startBatch();
+    if (ethRPC) {
+      ethRPC.startBatch();
     }
-  }, [erpc]);
+  }, [ethRPC]);
 
   useInterval(() => {
-    if (erpc) {
-      erpc.stopBatch();
-      erpc.startBatch();
+    if (ethRPC) {
+      ethRPC.stopBatch();
+      ethRPC.startBatch();
     }
   }, 100, true);
 
@@ -147,7 +134,7 @@ function App(props: any) {
       let transaction;
 
       try {
-        transaction = await erpc.eth_getTransactionByHash(q);
+        transaction = await ethRPC.eth_getTransactionByHash(q);
       } catch (e) {
         // do nothing
       }
@@ -157,7 +144,7 @@ function App(props: any) {
       }
       let block;
       try {
-        block = await erpc.eth_getBlockByHash(q, false);
+        block = await ethRPC.eth_getBlockByHash(q, false);
       } catch (e) {
         // do nothing
       }
@@ -166,7 +153,7 @@ function App(props: any) {
       }
     }
     if (isBlockNumber(q)) {
-      const block = await erpc.eth_getBlockByNumber(`0x${parseInt(q, 10).toString(16)}`, false);
+      const block = await ethRPC.eth_getBlockByNumber(`0x${parseInt(q, 10).toString(16)}`, false);
       if (block) {
         history.push(`/block/${block.hash}`);
       }
@@ -231,11 +218,11 @@ function App(props: any) {
                 />
               </Grid>
               <Grid item>
-                <NetworkDropdown
-                  networks={networks}
-                  setSelectedNetwork={setSelectedNetwork}
-                  selectedNetwork={selectedNetwork}
-                />
+                {selectedChain ? <ChainDropdown
+                                   chains={chains}
+                                   onChange={setSelectedChain}
+                                   selected={selectedChain} />
+                : <CircularProgress />}
                 <LanguageMenu />
                 <Tooltip title={t("JSON-RPC API Documentation") as string}>
                   <IconButton
@@ -253,7 +240,6 @@ function App(props: any) {
                     <CodeIcon />
                   </IconButton>
                 </Tooltip>
-                <ConfigurationMenu onChange={handleConfigurationChange} />
                 <Tooltip title={t("Toggle Dark Mode") as string}>
                   <IconButton onClick={darkMode.toggle}>
                     {darkMode.value ? <Brightness3Icon /> : <WbSunnyIcon />}

@@ -1,7 +1,7 @@
 import { CircularProgress } from "@material-ui/core";
 import * as React from "react";
 import TxView from "../components/TxView";
-import useCoreGethStore from "../stores/useCoreGethStore";
+import useCoreGethStore from "../stores/useEthRPCStore";
 import EthereumJSONRPC, {
   Transaction as ITransaction,
   TransactionReceiptOrNull as ITransactionReceipt,

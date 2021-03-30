@@ -9,6 +9,8 @@ interface IProps {
   onChange: (chain: Chain) => void;
 }
 
+const ITEM_HEIGHT = 48;
+
 const ChainDropdown: React.FC<IProps> = (props: IProps) => {
   const { t } = useTranslation();
   const { selected, onChange, chains } = props;
@@ -29,20 +31,25 @@ const ChainDropdown: React.FC<IProps> = (props: IProps) => {
 
   return (
     <>
-
       <Tooltip title={t("Switch Chain") as string}>
         <Button onClick={handleClick}>{selected.name}</Button>
       </Tooltip>
 
       <Menu
-        id="simple-menu"
+        id="long-menu"
         anchorEl={anchorEl}
         keepMounted
         open={Boolean(anchorEl)}
         onClose={handleClose}
+        PaperProps={{
+          style: {
+            maxHeight: ITEM_HEIGHT * 10.5,
+          },
+        }}
       >
         {chains.map((chain, i) => (
           <MenuItem
+            key={chain.name}
             selected={selected && selected.name === chain.name}
             onClick={() => handleMenuItemClick(chain)}
           >

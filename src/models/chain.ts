@@ -1,17 +1,17 @@
-export interface NativeCurrency {
+export interface INativeCurrency {
   name: string;
   symbol: string;
   decimals: number;
 }
 
-export interface Chain {
+export interface IChain {
   name: string;
   chainId?: number;
   shortName?: string;
   chain?: string;
   network: string;
   networkId?: string;
-  nativeCurrency?: NativeCurrency,
+  nativeCurrency?: INativeCurrency;
   rpc: string[];
   faucets?: string[];
   infoURL?: string[];

@@ -17,7 +17,7 @@ export default function NodeView(props: any) {
   let blockNum = blockNumber;
   if (urlParams && urlParams.number !== undefined) {
     try {
-      blockNum = parseInt(urlParams.number, 10)
+      blockNum = parseInt(urlParams.number, 10);
     } catch (e) {
       console.error("Unable to parse block number from URL");
     }

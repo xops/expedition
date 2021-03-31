@@ -37,8 +37,10 @@ function BlockList({ blocks }: any) {
             const filledPercent = (hexToNumber(b.gasUsed) / hexToNumber(b.gasLimit)) * 100;
 
             // Shorten hash views by concatenating first and last 4 chars.
-            const blockHashShort = b.hash.substring(2, 6) + '—' + b.hash.substring(b.hash.length - 5, b.hash.length - 1);
-            const authorHashShort = b.miner.substring(2, 6) + '—' + b.miner.substring(b.miner.length - 5, b.miner.length - 1);
+            const blockHashShort = b.hash.substring(2, 6) +
+              "—" + b.hash.substring(b.hash.length - 5, b.hash.length - 1);
+            const authorHashShort = b.miner.substring(2, 6) + "—" +
+              b.miner.substring(b.miner.length - 5, b.miner.length - 1);
 
             // Colorize left border derived from author credit account.
             const authorHashStyle = {
@@ -46,21 +48,28 @@ function BlockList({ blocks }: any) {
             };
 
             // Tally transactions which create contracts vs transactions with addresses.
-            var txTypes = {
+            const txTypes = {
               create: 0,
               transact: 0,
             };
 
-            for (var i = 0; i < b.transactions.length; i++) {
-              if (b.transactions[i].to !== null) {
+            b.transactions.forEach((tx: any) => {
+              if (tx.to !== null) {
                 txTypes.transact++;
               } else {
                 txTypes.create++;
               }
-            }
+            });
 
             // Calculate difference of block timestamp from that of parent.
-            const timeDifferenceFromParent = (index === sortedBlocks.length - 1) ? 0 : hexToNumber(b.timestamp) - hexToNumber(sortedBlocks[index + 1].timestamp);
+            let tdfp;
+
+            if (index === sortedBlocks.length - 1) {
+              tdfp = 0;
+            } else {
+              tdfp = hexToNumber(b.timestamp) -
+                hexToNumber(sortedBlocks[index + 1].timestamp);
+            }
 
             return (
               <TableRow key={b.number} style={authorHashStyle}>
@@ -88,11 +97,19 @@ function BlockList({ blocks }: any) {
                   </Link>
                 </TableCell>
                 <TableCell style={rightPaddingFix}>
-                  <Typography>{t("Timestamp Date", { date: hexToDate(b.timestamp) })}&nbsp;<sub>({timeDifferenceFromParent > 0 ? `+${timeDifferenceFromParent}` : `-${timeDifferenceFromParent}`}s)</sub></Typography>
+                  <Typography>{t("Timestamp Date", { date: hexToDate(b.timestamp) })}
+                    &nbsp;
+                    <sub>({tdfp > 0 ? `+${tdfp}` : `-${tdfp}`}s)</sub>
+                  </Typography>
                 </TableCell>
                 <TableCell style={rightPaddingFix}>
-                  <Tooltip title={t("Create Transactions", {count: txTypes.create}) as string} placement="top">
-                    <Typography variant="caption" color="textSecondary">{txTypes.create === 0 ? "" : txTypes.create}</Typography>
+                  <Tooltip
+                    title={t("Create Transactions", {count: txTypes.create}) as string}
+                    placement="top"
+                  >
+                    <Typography variant="caption" color="textSecondary">
+                      {txTypes.create === 0 ? "" : txTypes.create}
+                    </Typography>
                   </Tooltip>
                   <Typography>{txTypes.transact}</Typography>
                 </TableCell>

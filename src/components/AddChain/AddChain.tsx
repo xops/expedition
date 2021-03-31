@@ -1,11 +1,11 @@
-import React from 'react';
-import Button from '@material-ui/core/Button';
-import TextField from '@material-ui/core/TextField';
-import Dialog from '@material-ui/core/Dialog';
-import DialogActions from '@material-ui/core/DialogActions';
-import DialogContent from '@material-ui/core/DialogContent';
-import DialogContentText from '@material-ui/core/DialogContentText';
-import DialogTitle from '@material-ui/core/DialogTitle';
+import React from "react";
+import Button from "@material-ui/core/Button";
+import TextField from "@material-ui/core/TextField";
+import Dialog from "@material-ui/core/Dialog";
+import DialogActions from "@material-ui/core/DialogActions";
+import DialogContent from "@material-ui/core/DialogContent";
+import DialogContentText from "@material-ui/core/DialogContentText";
+import DialogTitle from "@material-ui/core/DialogTitle";
 
 import { Chain } from "../../models/chain";
 
@@ -21,7 +21,7 @@ const AddChain: React.FC<IProps> = (props: IProps) => {
   const [rpc, setRpc] = React.useState<string>();
 
   const handleSubmit = () => {
-    if (name === undefined || network === undefined || rpc === undefined) { return }
+    if (name === undefined || network === undefined || rpc === undefined) { return; }
 
     const chain: Chain = { name, network, rpc: [rpc] };
     props.onSubmit(chain);
@@ -33,7 +33,8 @@ const AddChain: React.FC<IProps> = (props: IProps) => {
         <DialogTitle id="form-dialog-title">Add Chain</DialogTitle>
         <DialogContent>
           <DialogContentText>
-            To add a chain to the chain list and begin using Expedition with your own rpc provider, please enter the required fields below:
+            To add a chain to the chain list and begin using Expedition with your own
+            rpc provider, please enter the required fields below:
           </DialogContentText>
           <TextField
             autoFocus
@@ -73,5 +74,6 @@ const AddChain: React.FC<IProps> = (props: IProps) => {
       </Dialog>
     </>
   );
-}
+};
+
 export default AddChain;

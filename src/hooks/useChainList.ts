@@ -10,14 +10,13 @@ export default function() {
     {
       name: "Matic",
       network: "mainnet",
-      rpc: ["https://rpc-mainnet.matic.network"]
+      rpc: ["https://rpc-mainnet.matic.network"],
     },
     {
       name: "Matic - Mumbai",
       network: "testnet",
-      rpc: ["https://rpc-mumbai.matic.today"]
+      rpc: ["https://rpc-mumbai.matic.today"],
     },
-
   ]);
 
   // uncomment once we add 'chain list provider' concept. This list blows.

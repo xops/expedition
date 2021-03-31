@@ -20,7 +20,7 @@ function useEthRPC(): [ERPC, Dispatch<Chain>] {
       try {
         parsedUrl = new URL(rpcUrl);
       } catch (e) {
-        console.log("passed an rpcURL that isnt real.");
+        alert("invalid rpc url " + rpcUrl);
         return;
       }
       let rpc;

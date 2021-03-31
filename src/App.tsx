@@ -15,7 +15,7 @@ import Brightness3Icon from "@material-ui/icons/Brightness3";
 import NotesIcon from "@material-ui/icons/Notes";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
 import CodeIcon from "@material-ui/icons/Code";
-import PlaylistAddIcon from '@material-ui/icons/PlaylistAdd';
+import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import useInterval from "use-interval";
 import ETHJSONSpec from "@etclabscore/ethereum-json-rpc-specification/openrpc.json";
 import { useTranslation } from "react-i18next";
@@ -176,7 +176,7 @@ function App(props: any) {
 
   const openAddChainModal = () => {
     setAddChainDialogIsOpen(true);
-  }
+  };
 
   const cancelAddChainDialog = () => {
     setAddChainDialogIsOpen(false);

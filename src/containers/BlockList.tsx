@@ -4,7 +4,7 @@ import * as React from "react";
 import BlockList from "../components/BlockList";
 import getBlocks from "../helpers";
 import { ArrowForwardIos, ArrowBackIos } from "@material-ui/icons";
-import EthereumJSONRPC, { Block as IBlock } from "@etclabscore/ethereum-json-rpc";
+import { Block as IBlock } from "@etclabscore/ethereum-json-rpc";
 
 interface IProps {
   from: number;

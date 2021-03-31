@@ -1,15 +1,15 @@
 import { CircularProgress } from "@material-ui/core";
 import * as React from "react";
 import TxView from "../components/TxView";
-import useCoreGethStore from "../stores/useCoreGethStore";
-import EthereumJSONRPC, {
+import useEthRPCStore from "../stores/useEthRPCStore";
+import {
   Transaction as ITransaction,
   TransactionReceiptOrNull as ITransactionReceipt,
 } from "@etclabscore/ethereum-json-rpc";
 
 export default function TransactionContainer(props: any) {
   const hash = props.match.params.hash;
-  const [erpc]: [EthereumJSONRPC, any] = useCoreGethStore();
+  const [erpc] = useEthRPCStore();
   const [transaction, setTransaction] = React.useState<ITransaction>();
   const [receipt, setReceipt] = React.useState<ITransactionReceipt>();
 

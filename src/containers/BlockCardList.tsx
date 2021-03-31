@@ -1,10 +1,10 @@
 import { CircularProgress, Grid } from "@material-ui/core";
-import useCoreGethStore from "../stores/useCoreGethStore";
+import useEthRPCStore from "../stores/useEthRPCStore";
 import * as React from "react";
 import getBlocks from "../helpers";
 import BlockCard from "../components/BlockCard";
 import { hexToNumber } from "@etclabscore/eserialize";
-import EthereumJSONRPC, { Block as IBlock } from "@etclabscore/ethereum-json-rpc";
+import { Block as IBlock } from "@etclabscore/ethereum-json-rpc";
 
 interface IProps {
   from: number;
@@ -14,7 +14,7 @@ interface IProps {
 
 export default function BlockCardListContainer(props: IProps) {
   const { from, to, style } = props;
-  const [erpc]: [EthereumJSONRPC, any] = useCoreGethStore();
+  const [erpc] = useEthRPCStore();
   const [blocks, setBlocks] = React.useState<IBlock[]>();
 
   React.useEffect(() => {

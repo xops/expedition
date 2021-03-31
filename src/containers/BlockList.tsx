@@ -1,10 +1,10 @@
 import { CircularProgress, Grid, IconButton } from "@material-ui/core";
-import useCoreGethStore from "../stores/useCoreGethStore";
+import useEthRPCStore from "../stores/useEthRPCStore";
 import * as React from "react";
 import BlockList from "../components/BlockList";
 import getBlocks from "../helpers";
 import { ArrowForwardIos, ArrowBackIos } from "@material-ui/icons";
-import EthereumJSONRPC, { Block as IBlock } from "@etclabscore/ethereum-json-rpc";
+import { Block as IBlock } from "@etclabscore/ethereum-json-rpc";
 
 interface IProps {
   from: number;
@@ -18,7 +18,7 @@ interface IProps {
 
 export default function BlockListContainer(props: IProps) {
   const { from, to, style } = props;
-  const [erpc]: [EthereumJSONRPC, any] = useCoreGethStore();
+  const [erpc] = useEthRPCStore();
   const [blocks, setBlocks] = React.useState<IBlock[]>();
   React.useEffect(() => {
     if (!erpc) { return; }

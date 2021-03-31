@@ -1,5 +1,5 @@
 import { Grid, Typography, CircularProgress, Theme, Button } from "@material-ui/core";
-import useCoreGethStore from "../stores/useCoreGethStore";
+import useEthRPCStore from "../stores/useEthRPCStore";
 import * as React from "react";
 import { weiToGwei } from "../components/formatters";
 import HashRate from "../components/HashRate";
@@ -13,7 +13,7 @@ import { hexToNumber } from "@etclabscore/eserialize";
 import { useTranslation } from "react-i18next";
 import { ArrowForwardIos } from "@material-ui/icons";
 import StatCharts from "../components/StatCharts";
-import EthereumJSONRPC, { Block as IBlock, IsSyncingResult as ISyncing} from "@etclabscore/ethereum-json-rpc";
+import { Block as IBlock, IsSyncingResult as ISyncing} from "@etclabscore/ethereum-json-rpc";
 
 const useState = React.useState;
 
@@ -25,7 +25,7 @@ const config = {
 };
 
 export default (props: any) => {
-  const [erpc]: [EthereumJSONRPC, any] = useCoreGethStore();
+  const [erpc] = useEthRPCStore();
   const theme = useTheme<Theme>();
   const victoryTheme = getTheme(theme);
   const [blockNumber] = useBlockNumber(erpc);

@@ -54,7 +54,9 @@ function App(props: any) {
     if (chains.length === 0) { return; }
 
     setSelectedChain(chains[0]);
-  }, [chains]);
+
+    // eslint-disable-next-line react-hooks/exhaustive-deps
+  }, [chains, selectedChain]);
 
   const [query, setQuery] = useQueryParams({
     network: StringParam,
@@ -108,7 +110,7 @@ function App(props: any) {
     if (selectedChain !== undefined) {
       setEthRPCChain(selectedChain);
     }
-  }, [selectedChain]);
+  }, [selectedChain, setEthRPCChain]);
 
   React.useEffect(() => {
     if (ethRPC) {

@@ -1,6 +1,6 @@
 import { useEffect } from "react";
 import { uniqBy } from "lodash";
-import { Chain } from "../models/chain";
+import { IChain as Chain } from "../models/chain";
 import React from "react";
 
 const mergeChainSets = (c1: Chain[], c2: Chain[]) => uniqBy(c1.concat(c2), "name");

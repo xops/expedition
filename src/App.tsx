@@ -28,7 +28,7 @@ import BlockRawContainer from "./containers/BlockRawContainer";
 import TransactionRawContainer from "./containers/TransactionRawContainer";
 import expeditionLogo from "./expedition.png";
 import MinerStatsPage from "./containers/MinerStatsPage";
-import { Chain } from "./models/chain";
+import { IChain as Chain } from "./models/chain";
 import useChainListStore from "./stores/useChainListStore";
 import useEthRPCStore from "./stores/useEthRPCStore";
 import AddChain from "./components/AddChain/AddChain";

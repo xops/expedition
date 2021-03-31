@@ -1,6 +1,6 @@
 import ERPC from "@etclabscore/ethereum-json-rpc";
 import React, { Dispatch } from "react";
-import { Chain } from "../models/chain";
+import { IChain as Chain } from "../models/chain";
 
 function useEthRPC(): [ERPC, Dispatch<Chain>] {
   const [erpc, setErpc] = React.useState<ERPC>();

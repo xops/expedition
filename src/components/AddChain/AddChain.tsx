@@ -7,7 +7,7 @@ import DialogContent from "@material-ui/core/DialogContent";
 import DialogContentText from "@material-ui/core/DialogContentText";
 import DialogTitle from "@material-ui/core/DialogTitle";
 
-import { Chain } from "../../models/chain";
+import { IChain as Chain } from "../../models/chain";
 
 interface IProps {
   open: boolean;

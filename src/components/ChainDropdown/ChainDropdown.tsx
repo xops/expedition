@@ -1,7 +1,7 @@
 import * as React from "react";
 import { Menu, MenuItem, Tooltip, Button, Typography } from "@material-ui/core";
 import { useTranslation } from "react-i18next";
-import { Chain } from "../../models/chain";
+import { IChain as Chain } from "../../models/chain";
 
 interface IProps {
   chains: Chain[];

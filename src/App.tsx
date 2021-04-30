@@ -270,7 +270,7 @@ function App(props: any) {
                 <Tooltip title={t("Expedition Github") as string}>
                   <IconButton
                     onClick={() =>
-                      window.open("https://github.com/etclabscore/expedition")
+                      window.open("https://github.com/xops/expedition")
                     }>
                     <CodeIcon />
                   </IconButton>

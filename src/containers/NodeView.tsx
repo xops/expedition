@@ -1,7 +1,7 @@
-import { CircularProgress } from "@material-ui/core";
 import * as React from "react";
 import { useBlockNumber } from "../helpers";
 import BlockList from "./BlockList";
+import LoadingView from "../components/LoadingView/LoadingView";
 import useEthRPCStore from "../stores/useEthRPCStore";
 import { useParams } from "react-router-dom";
 
@@ -35,7 +35,7 @@ export default function NodeView(props: any) {
     }
   }, [blockNumber, blockNum, props.history]);
   if (blockNumber === undefined || blockNum > blockNumber) {
-    return (<CircularProgress />);
+    return (<LoadingView />);
   }
   return (
     <BlockList

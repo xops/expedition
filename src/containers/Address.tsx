@@ -1,6 +1,6 @@
-import { CircularProgress } from "@material-ui/core";
 import * as React from "react";
 import AddressView from "../components/AddressView";
+import LoadingView from "../components/LoadingView/LoadingView";
 import _ from "lodash";
 import getBlocks, { useBlockNumber } from "../helpers";
 import useEthRPCStore from "../stores/useEthRPCStore";
@@ -88,7 +88,7 @@ const Address: React.FC<IProps> = ({ match, history }) => {
   }, [from, to]);
 
   if (transactionCount === undefined || balance === undefined || code === undefined) {
-    return <CircularProgress />;
+    return <LoadingView />;
   }
   return (
     <>

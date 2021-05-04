@@ -1,7 +1,8 @@
-import { CircularProgress, Grid, IconButton } from "@material-ui/core";
+import { Grid, IconButton } from "@material-ui/core";
 import useEthRPCStore from "../stores/useEthRPCStore";
 import * as React from "react";
 import BlockList from "../components/BlockList";
+import LoadingView from "../components/LoadingView/LoadingView";
 import getBlocks from "../helpers";
 import { ArrowForwardIos, ArrowBackIos } from "@material-ui/icons";
 import { Block as IBlock } from "@etclabscore/ethereum-json-rpc";
@@ -27,7 +28,7 @@ export default function BlockListContainer(props: IProps) {
   }, [from, to]);
 
   if (!blocks) {
-    return <CircularProgress />;
+    return <LoadingView />;
   }
   return (
     <div style={style}>

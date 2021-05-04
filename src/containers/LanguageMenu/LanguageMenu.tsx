@@ -34,7 +34,7 @@ const LanguageMenu: React.FC = (props) => {
         onClose={handleClose}
       >
         {Object.values(supportedLanguages).map((lang, i) => (
-          <MenuItem onClick={(event) => handleMenuItemClick(lang)}>{lang}</MenuItem>
+          <MenuItem key={i} onClick={(event) => handleMenuItemClick(lang)}>{lang}</MenuItem>
         ))}
       </Menu>
     </>

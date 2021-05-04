@@ -1,7 +1,7 @@
-import { CircularProgress } from "@material-ui/core";
 import useEthRPCStore from "../stores/useEthRPCStore";
 import * as React from "react";
 import BlockRaw from "../components/BlockRaw";
+import LoadingView from "../components/LoadingView/LoadingView";
 import { Block as IBlock } from "@etclabscore/ethereum-json-rpc";
 
 export default function BlockRawContainer(props: any) {
@@ -15,6 +15,6 @@ export default function BlockRawContainer(props: any) {
       setBlock(b);
     });
   }, [hash, erpc]);
-  if (!block) { return (<CircularProgress />); }
+  if (!block) { return (<LoadingView />); }
   return (<BlockRaw block={block} />);
 }

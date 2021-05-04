@@ -1,4 +1,4 @@
-import { CircularProgress } from "@material-ui/core";
+import LoadingView from "../components/LoadingView/LoadingView";
 import useEthRPCStore from "../stores/useEthRPCStore";
 import * as React from "react";
 import BlockView from "../components/BlockView";
@@ -17,6 +17,6 @@ export default function Block(props: any) {
     });
   }, [hash, erpc]);
 
-  if (!block) { return (<CircularProgress />); }
+  if (!block) { return (<LoadingView />); }
   return (<BlockView block={block} />);
 }

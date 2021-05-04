@@ -1,18 +1,14 @@
-import { Grid, Typography, CircularProgress, Theme, Button } from "@material-ui/core";
+import { Grid, Typography } from "@material-ui/core";
 import useEthRPCStore from "../stores/useEthRPCStore";
 import * as React from "react";
 import { weiToGwei } from "../components/formatters";
-import HashRate from "../components/HashRate";
+import LoadingView from "../components/LoadingView/LoadingView";
 import getBlocks, { useBlockNumber } from "../helpers";
 import useInterval from "use-interval";
-import { useTheme } from "@material-ui/styles";
-import getTheme from "../themes/victoryTheme";
 import ChartCard from "../components/ChartCard";
 import BlockListContainer from "./BlockList";
 import { hexToNumber } from "@etclabscore/eserialize";
 import { useTranslation } from "react-i18next";
-import { ArrowForwardIos } from "@material-ui/icons";
-import StatCharts from "../components/StatCharts";
 import { Block as IBlock, IsSyncingResult as ISyncing} from "@etclabscore/ethereum-json-rpc";
 
 const useState = React.useState;
@@ -26,10 +22,9 @@ const config = {
 
 export default (props: any) => {
   const [erpc] = useEthRPCStore();
-  const theme = useTheme<Theme>();
-  const victoryTheme = getTheme(theme);
   const [blockNumber] = useBlockNumber(erpc);
   const [chainId, setChainId] = useState<string>();
+  // eslint-disable-next-line
   const [block, setBlock] = useState<IBlock>();
   const [blocks, setBlocks] = useState<IBlock[]>();
   const [gasPrice, setGasPrice] = useState<string>();
@@ -83,9 +78,9 @@ export default (props: any) => {
   }, [erpc]);
 
   if (blocks === undefined || chainId === undefined || gasPrice === undefined || peerCount === undefined) {
-    return <CircularProgress />;
-  }
+    return <LoadingView />;
 
+  }
   return (
     <div>
       <Grid container spacing={3} direction="column">
@@ -116,7 +111,7 @@ export default (props: any) => {
               <Typography variant="h4">{weiToGwei(hexToNumber(gasPrice))} Gwei</Typography>
             </ChartCard>
           </Grid>
-          <Grid key="hRate" item>
+          {/* <Grid key="hRate" item>
             <ChartCard title={t("Network Hash Rate")}>
               {block &&
                 <HashRate block={block} blockTime={config.blockTime}>
@@ -124,22 +119,21 @@ export default (props: any) => {
                 </HashRate>
               }
             </ChartCard>
-          </Grid>
-          <Grid key="peers" item>
+          </Grid> */}
+          {/* <Grid key="peers" item>
             <ChartCard title={t("Peers")}>
               <Typography variant="h4">{hexToNumber(peerCount)}</Typography>
             </ChartCard>
-          </Grid>
+          </Grid> */}
         </Grid>
       </Grid>
-      <StatCharts victoryTheme={victoryTheme} blocks={blocks} />
       <Grid container justify="flex-end">
-        <Button
+        {/* <Button
           color="primary"
           variant="outlined"
           endIcon={<ArrowForwardIos />}
           onClick={() => props.history.push("/stats/miners")}
-        >More Stats</Button>
+        >More Stats</Button> */}
       </Grid>
       <br />
 
@@ -151,7 +145,7 @@ export default (props: any) => {
         onNext={() => {
           props.history.push(`/blocks/${blockNumber - 15}`);
         }}
-        style={{ marginTop: "30px" }} />
+      />
     </div >
   );
 };

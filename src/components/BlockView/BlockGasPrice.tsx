@@ -3,36 +3,6 @@ import { hexToNumber } from "@etclabscore/eserialize";
 import { useTranslation } from "react-i18next";
 import { TableCell, TableRow } from "@material-ui/core";
 
-const BigIntMinBy = (list: [], func: (item: any) => BigInt): any => {
-  let min: any;
-  for (const item of list) {
-    if (min === undefined) {
-      min = item;
-      continue;
-    }
-    const r = func(item);
-    if (r < func(min)) {
-      min = item;
-    }
-  }
-  return min;
-};
-
-const BigIntMaxBy = (list: [], func: (item: any) => BigInt): any => {
-  let max: any;
-  for (const item of list) {
-    if (max === undefined) {
-      max = item;
-      continue;
-    }
-    const r = func(item);
-    if (r > func(max)) {
-      max = item;
-    }
-  }
-  return max;
-};
-
 function BlockGasPrice(props: any) {
   const { t } = useTranslation();
   const { transactions } = props.block;
@@ -42,18 +12,18 @@ function BlockGasPrice(props: any) {
   return (
     <>
       <TableRow>
-        <TableCell>{t("Min Gas Price")}</TableCell>
+        <TableCell>{t("Gas Price")}</TableCell>
         <TableCell>
-          {hexToNumber(BigIntMinBy(transactions, (tx: any) => BigInt(tx.gasPrice))?.gasPrice || "")}
+          {hexToNumber(transactions[0].gasPrice)}
         </TableCell>
       </TableRow>
 
-      <TableRow>
+      {/* <TableRow>
         <TableCell>{t("Max Gas Price")}</TableCell>
         <TableCell>
           {hexToNumber(BigIntMaxBy(transactions, (tx: any) => BigInt(tx.gasPrice))?.gasPrice) || ""}
         </TableCell>
-      </TableRow>
+      </TableRow> */}
     </>
   );
 }

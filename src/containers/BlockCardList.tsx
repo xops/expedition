@@ -1,8 +1,9 @@
-import { CircularProgress, Grid } from "@material-ui/core";
+import { Grid } from "@material-ui/core";
 import useEthRPCStore from "../stores/useEthRPCStore";
 import * as React from "react";
 import getBlocks from "../helpers";
 import BlockCard from "../components/BlockCard";
+import LoadingView from "../components/LoadingView/LoadingView";
 import { hexToNumber } from "@etclabscore/eserialize";
 import { Block as IBlock } from "@etclabscore/ethereum-json-rpc";
 
@@ -33,7 +34,7 @@ export default function BlockCardListContainer(props: IProps) {
   }, [from, to]);
 
   if (!blocks) {
-    return <CircularProgress />;
+    return <LoadingView />;
   }
   return (
     <Grid container spacing={2} style={style}>

@@ -1,6 +1,6 @@
-import { CircularProgress } from "@material-ui/core";
 import * as React from "react";
 import TxView from "../components/TxView";
+import LoadingView from "../components/LoadingView/LoadingView";
 import useEthRPCStore from "../stores/useEthRPCStore";
 import {
   Transaction as ITransaction,
@@ -30,7 +30,7 @@ export default function TransactionContainer(props: any) {
   }, [hash, erpc]);
 
   if (!transaction || !receipt) {
-    return (<CircularProgress />);
+    return (<LoadingView />);
   }
 
   return (<TxView tx={transaction} receipt={receipt} />);

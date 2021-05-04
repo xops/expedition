@@ -1,7 +1,7 @@
-import { CircularProgress } from "@material-ui/core";
 import * as React from "react";
 import useEthRPCStore from "../stores/useEthRPCStore";
 import TxRaw from "../components/TxRaw/TxRaw";
+import LoadingView from "../components/LoadingView/LoadingView";
 import {
   Transaction as ITransaction,
   TransactionReceiptOrNull as ITransactionReceipt,
@@ -30,7 +30,7 @@ export default function TransactionRawContainer(props: any) {
   }, [hash, erpc]);
 
   if (!transaction || !receipt) {
-    return (<CircularProgress />);
+    return (<LoadingView />);
   }
 
   return (<TxRaw tx={transaction} receipt={receipt} />);

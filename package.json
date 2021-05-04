@@ -34,6 +34,7 @@
     "@semantic-release/npm": "^5.3.4",
     "@semantic-release/release-notes-generator": "^7.3.2",
     "bignumber.js": "^9.0.0",
+    "dotenv": "^8.2.0",
     "ethereumjs-util": "^6.1.0",
     "ethjs-unit": "^0.1.6",
     "history": "^4.9.0",

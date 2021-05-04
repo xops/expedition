@@ -1,4 +1,4 @@
-import { AppBar, CssBaseline, Toolbar, Typography, IconButton, Grid, InputBase, Tooltip, CircularProgress } from "@material-ui/core";
+import { AppBar, CssBaseline, Toolbar, IconButton, Grid, InputBase, Tooltip } from "@material-ui/core";
 import { ThemeProvider } from "@material-ui/styles";
 import Link from "@material-ui/core/Link";
 import React, { Dispatch, ChangeEvent, KeyboardEvent, useState, useEffect } from "react";
@@ -12,26 +12,24 @@ import NodeView from "./containers/NodeView";
 import Transaction from "./containers/Transaction";
 import { darkTheme, lightTheme } from "./themes/jadeTheme";
 import Brightness3Icon from "@material-ui/icons/Brightness3";
-import NotesIcon from "@material-ui/icons/Notes";
+// import NotesIcon from "@material-ui/icons/Notes";
 import WbSunnyIcon from "@material-ui/icons/WbSunny";
-import CodeIcon from "@material-ui/icons/Code";
-import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
+// import CodeIcon from "@material-ui/icons/Code";
+// import PlaylistAddIcon from "@material-ui/icons/PlaylistAdd";
 import useInterval from "use-interval";
 import ETHJSONSpec from "@etclabscore/ethereum-json-rpc-specification/openrpc.json";
 import { useTranslation } from "react-i18next";
 import LanguageMenu from "./containers/LanguageMenu";
 import { createBrowserHistory } from "history";
-import ChainDropdown from "./components/ChainDropdown/ChainDropdown";
+// import ChainDropdown from "./components/ChainDropdown/ChainDropdown";
 import { StringParam, QueryParamProvider, useQueryParams } from "use-query-params";
 import { createPreserveQueryHistory } from "./helpers/createPreserveHistory";
 import BlockRawContainer from "./containers/BlockRawContainer";
 import TransactionRawContainer from "./containers/TransactionRawContainer";
-import expeditionLogo from "./expedition.png";
-import MinerStatsPage from "./containers/MinerStatsPage";
+import omgxLogo from "./omgx.png";
 import { IChain as Chain } from "./models/chain";
 import useChainListStore from "./stores/useChainListStore";
 import useEthRPCStore from "./stores/useEthRPCStore";
-import AddChain from "./components/AddChain/AddChain";
 
 const history = createPreserveQueryHistory(createBrowserHistory, ["network", "rpcUrl"])();
 
@@ -42,10 +40,9 @@ function App(props: any) {
   const theme = darkMode.value ? darkTheme : lightTheme;
 
   const [selectedChain, setSelectedChain] = useState<Chain>();
+  // eslint-disable-next-line
   const [chains, setChains] = useChainListStore<[Chain[], Dispatch<Chain[]>]>();
   const [ethRPC, setEthRPCChain] = useEthRPCStore();
-
-  const [addChainDialogIsOpen, setAddChainDialogIsOpen] = useState<boolean>(false);
 
   // default the selectedChain once chain list loads
   useEffect(() => {
@@ -97,10 +94,10 @@ function App(props: any) {
 
     if (name !== query.network) {
       setQuery({ network: name });
-      history.push({
-        pathname: history.location.pathname,
-        search: `?network=${name}`,
-      });
+      // history.push({
+      //   pathname: history.location.pathname,
+      //   search: `?network=${name}`,
+      // });
     }
   // eslint-disable-next-line react-hooks/exhaustive-deps
   }, [selectedChain, setQuery]);
@@ -176,20 +173,6 @@ function App(props: any) {
     }
   };
 
-  const openAddChainModal = () => {
-    setAddChainDialogIsOpen(true);
-  };
-
-  const cancelAddChainDialog = () => {
-    setAddChainDialogIsOpen(false);
-  };
-
-  const submitAddChainDialog = (c: Chain) => {
-    setAddChainDialogIsOpen(false);
-    setChains(chains.concat(c));
-    setSelectedChain(c);
-  };
-
   return (
     <Router history={history}>
       <ThemeProvider theme={theme}>
@@ -206,16 +189,11 @@ function App(props: any) {
                   <Grid container>
                     <Grid>
                       <img
-                        alt="expedition-logo"
+                        alt="omgx-logo"
                         height="30"
                         style={{ marginRight: "10px" }}
-                        src={expeditionLogo}
+                        src={omgxLogo}
                       />
-                    </Grid>
-                    <Grid>
-                      <Typography color="textSecondary" variant="h6">
-                        {t("Expedition")}
-                      </Typography>
                     </Grid>
                   </Grid>
                 </Link>
@@ -248,33 +226,23 @@ function App(props: any) {
                 />
               </Grid>
               <Grid item>
-                {selectedChain ? <ChainDropdown
-                                   chains={chains}
-                                   onChange={setSelectedChain}
-                                   selected={selectedChain} />
-                : <CircularProgress />}
-                <Tooltip title={t("Add custom chain") as string}>
-                  <IconButton onClick={openAddChainModal}>
-                    <PlaylistAddIcon />
-                  </IconButton>
-                </Tooltip>
                 <LanguageMenu />
-                <Tooltip title={t("JSON-RPC API Documentation") as string}>
+                {/* <Tooltip title={t("JSON-RPC API Documentation") as string}>
                   <IconButton
                     onClick={() =>
                       window.open("https://playground.open-rpc.org/?schemaUrl=https://raw.githubusercontent.com/etclabscore/ethereum-json-rpc-specification/master/openrpc.json") //tslint:disable-line
                     }>
                     <NotesIcon />
                   </IconButton>
-                </Tooltip>
-                <Tooltip title={t("Expedition Github") as string}>
+                </Tooltip> */}
+                {/* <Tooltip title={t("Expedition Github") as string}>
                   <IconButton
                     onClick={() =>
                       window.open("https://github.com/xops/expedition")
                     }>
                     <CodeIcon />
                   </IconButton>
-                </Tooltip>
+                </Tooltip> */}
                 <Tooltip title={t("Toggle Dark Mode") as string}>
                   <IconButton onClick={darkMode.toggle}>
                     {darkMode.value ? <Brightness3Icon /> : <WbSunnyIcon />}
@@ -284,18 +252,11 @@ function App(props: any) {
             </Grid>
           </Toolbar>
         </AppBar>
-        <AddChain
-          open={addChainDialogIsOpen}
-          onCancel={cancelAddChainDialog}
-          onSubmit={submitAddChainDialog}
-        />
         <div style={{ margin: "0px 25px 0px 25px" }}>
           <QueryParamProvider ReactRouterRoute={Route}>
             <CssBaseline />
             <Switch>
               <Route path={"/"} component={Dashboard} exact={true} />
-              <Route path={"/stats/miners"} component={MinerStatsPage} exact={true} />
-              <Route path={"/stats/miners/:block"} component={MinerStatsPage} />
               <Route path={"/block/:hash/raw"} component={BlockRawContainer} />
               <Route path={"/block/:hash"} component={Block} />
               <Route path={"/blocks/:number"} component={NodeView} />

@@ -1,15 +1,16 @@
 import ERPC from "@etclabscore/ethereum-json-rpc";
-import React, { Dispatch } from "react";
+import React, { Dispatch, useState, useEffect } from "react";
 import { IChain as Chain } from "../models/chain";
 
-function useEthRPC(): [ERPC, Dispatch<Chain>] {
+function useEthRPC(queryUrlOverride?: string): [ERPC, Dispatch<Chain>] {
   const [erpc, setErpc] = React.useState<ERPC>();
   const [selectedChain, setSelectedChain] = React.useState<Chain>();
+  const [urlOverride] = useState(queryUrlOverride || process.env.REACT_APP_ETH_RPC_URL);
 
-  React.useEffect(() => {
-    if (selectedChain === undefined) { return; }
+  useEffect(() => {
+    if (selectedChain === undefined && !urlOverride) { return; }
 
-    const rpcUrl = selectedChain.rpc.reduce((curr, toCheck) => {
+    const rpcUrl = selectedChain?.rpc.reduce((curr, toCheck) => {
       if (curr !== selectedChain.rpc[0]) { return curr; }
       if (toCheck.indexOf("${") !== -1) { return curr; }
       return toCheck;
@@ -17,10 +18,12 @@ function useEthRPC(): [ERPC, Dispatch<Chain>] {
 
     const runAsync = async () => {
       let parsedUrl;
+      const newUrl = urlOverride || rpcUrl;
+      if (!newUrl) { return; }
       try {
-        parsedUrl = new URL(rpcUrl);
+        parsedUrl = new URL(newUrl);
       } catch (e) {
-        alert("invalid rpc url " + rpcUrl);
+        alert("invalid rpc url " + newUrl);
         return;
       }
       let rpc;

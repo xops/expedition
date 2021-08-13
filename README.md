@@ -27,7 +27,6 @@
       - [Prerequisites](#prerequisites)
       - [Installation](#installation)
 - [Usage](#usage)
-  - [Run Service](#run-service)
   - [Start explorer](#start-the-explorer)
   - [Configurations](#configurations)
 - [Contributing](#contributing)
@@ -61,31 +60,6 @@ git clone https://github.com/xops/expedition.git && cd expedition && npm install
 
 <!-- example usage, screen shots, demos -->
 ## Usage
-### Run service
-If you don't have a [service-runner](https://github.com/etclabscore/jade-service-runner) running, then you can use the one in the package.json via: (or see the configuration section below to provide your own ethereum rpc URL):
-```bash
-npm run service-runner
-```
-*Jade Service Runner will run at http://localhost:8002/.*
-
-#### Core-Geth & Service Runner
-
-By default, core-geth service will run ETC mainnet. Jade Service runner conveniently contains the service in the `/.services/` directory of project.
-
-```bash
-# ./services/
-.
-└── core-geth
-    └── 1.11.2
-        └── core-geth
-            └── 1.11.2
-                └── classic
-                    ├── geth
-                    │   ├── chaindata
-                    │   ├── ethash
-                    │   └── nodes
-                    └── keystore
-```
 
 ### Start the explorer
 ```bash
@@ -99,27 +73,21 @@ npm start
 
 `?rpcUrl=` Set custom rpc url.
 
-Example: https://expedition.dev/?rpcUrl=https://services.jade.builders/core-geth/kotti/1.11.2
+Example: 
+
+http://localhost:3000/?rpcUrl=https://www.ethercluster.com/kotti
 
 #### Configure default urls via environment variables
 
 Override eth url
 
 ```
-REACT_APP_ETH_RPC_URL=https://services.jade.builders/core-geth/mainnet/1.11.2 npm start
-```
-
-**OR**
-
-Override service runner url
-
-```
-REACT_APP_SERVICE_RUNNER_URL=https://services.jade.builders/ npm start
+REACT_APP_ETH_RPC_URL=https://www.ethercluster.com/kotti npm start
 ```
 
 <!-- template just leave alone  -->
 ## Roadmap
-See the [open issues](https://github.com/etclabscore/expedition/issues) for a list of proposed features (and known issues).
+See the [open issues](https://github.com/etclabscore/xops/issues) for a list of proposed features (and known issues).
 
 <!-- template just leave alone  -->
 ## Contributing
@@ -130,10 +98,7 @@ Apache License 2.0
 
 <!-- references and additional resources  -->
 ## Resources
-- [Ethereum JSON RPC Specification](https://github.com/etclabscore/ethereum-json-rpc-specification)
-- [Jade Service Runner](https://github.com/etclabscore/jade-service-runner)
 - [OpenRPC](https://open-rpc.org)
-- [Pristine](https://github.com/etclabscore/pristine)
 
 ---
 *This repo originally forked from [ETCDEVTeam/emerald-explorer](https://github.com/ETCDEVTeam/emerald-explorer).*

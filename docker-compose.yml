@@ -1,0 +1,6 @@
+version: '3.3'
+services:
+  expedition:
+    ports:
+      - '80:80'
+    build: .

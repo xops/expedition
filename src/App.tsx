@@ -271,7 +271,7 @@ function App(props: any) {
                     </Grid>
                     <Grid>
                       <Typography color="textSecondary" variant="h6">
-                        {t("Expedition")}
+                        {t("Beresheet")}
                       </Typography>
                     </Grid>
                   </Grid>
@@ -327,27 +327,6 @@ function App(props: any) {
                   </IconButton>
                 </Tooltip>
                 <LanguageMenu />
-                <Tooltip title={t("JSON-RPC API Documentation") as string}>
-                  <IconButton
-                    onClick={
-                      () =>
-                        window.open(
-                          "https://playground.open-rpc.org/?schemaUrl=https://raw.githubusercontent.com/etclabscore/ethereum-json-rpc-specification/master/openrpc.json"
-                        ) //tslint:disable-line
-                    }
-                  >
-                    <NotesIcon />
-                  </IconButton>
-                </Tooltip>
-                <Tooltip title={t("Expedition Github") as string}>
-                  <IconButton
-                    onClick={() =>
-                      window.open("https://github.com/xops/expedition")
-                    }
-                  >
-                    <CodeIcon />
-                  </IconButton>
-                </Tooltip>
                 <Tooltip title={t("Toggle Dark Mode") as string}>
                   <IconButton onClick={darkMode.toggle}>
                     {darkMode.value ? <Brightness3Icon /> : <WbSunnyIcon />}

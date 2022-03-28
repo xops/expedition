@@ -31,7 +31,11 @@ const Address: React.FC<IProps> = ({ match, history }) => {
   const blockNum = block === undefined ? blockNumber : parseInt(block, 10);
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
 
-  const from = Math.max(blockNum ? blockNum : 0 - 99, 0);
+  let from = blockNum - 100;
+  if (from < 0) {
+    from = 0;
+  }
+
   const to = blockNum;
 
   React.useEffect(() => {
@@ -77,7 +81,7 @@ const Address: React.FC<IProps> = ({ match, history }) => {
         if (!tx) {
           return false;
         }
-        return tx.to === address || tx.from === address;
+        return tx.to.toUpperCase() === address.toUpperCase() || tx.from.toUpperCase() === address.toUpperCase();
       });
       const sortedTxes = _.sortBy(filteredTxes, (tx: any) => {
         return hexToNumber(tx.blockNumber);

@@ -227,7 +227,7 @@ function TxView(props: ITxViewProps) {
 
             <TableRow>
               <TableCell>{t("Receipt Status")}</TableCell>
-              <TableCell>{receipt.status}</TableCell>
+              <TableCell>{(receipt.status === '0x1' ? "SUCCESS": "FAILED") + ` (${receipt.status})`}</TableCell>
             </TableRow>
 
             <TableRow>

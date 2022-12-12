@@ -21,6 +21,8 @@ interface IProps {
   history: History;
 }
 
+const CHUNK = 99
+
 const Address: React.FC<IProps> = ({ match, history }) => {
   const { address, block } = match.params;
   const [erpc] = useEthRPCStore();
@@ -31,7 +33,7 @@ const Address: React.FC<IProps> = ({ match, history }) => {
   const blockNum = block === undefined ? blockNumber : parseInt(block, 10);
   const [transactions, setTransactions] = React.useState<Transaction[]>([]);
 
-  const from = Math.max(blockNum ? blockNum : 0 - 99, 0);
+  const from = Math.max(blockNum ? blockNum - CHUNK : 0 - CHUNK, 0);
   const to = blockNum;
 
   React.useEffect(() => {
@@ -69,6 +71,7 @@ const Address: React.FC<IProps> = ({ match, history }) => {
     });
   }, [blockNumber, address, erpc]);
 
+
   React.useEffect(() => {
     if (!erpc) { return; }
     getBlocks(from, to, erpc).then((blcks) => {
@@ -77,7 +80,8 @@ const Address: React.FC<IProps> = ({ match, history }) => {
         if (!tx) {
           return false;
         }
-        return tx.to === address || tx.from === address;
+        // includes receive transactions
+        return tx.to?.toLowerCase() === address.toLowerCase() || tx.from?.toLowerCase() === address.toLowerCase();
       });
       const sortedTxes = _.sortBy(filteredTxes, (tx: any) => {
         return hexToNumber(tx.blockNumber);

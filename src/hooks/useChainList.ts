@@ -5,22 +5,21 @@ import React from "react";
 
 // const mergeChainSets = (c1: Chain[], c2: Chain[]) => uniqBy(c1.concat(c2), "name");
 
-export default function() {
+export default function () {
   const [chains, setChains] = React.useState<Chain[]>([
     {
-      name: "Ethereum Classic",
+      name: "OPN Susono",
       network: "mainnet",
-      rpc: ["https://www.ethercluster.com/etc"],
+      rpc: [
+        "https://gateway.opn.network/node/ext/bc/2VsZe5DstWw2bfgdx3YbjKcMsJnNDjni95sZorBEdk9L9Qr9Fr/rpc",
+      ],
     },
     {
-      name: "Matic",
-      network: "mainnet",
-      rpc: ["https://rpc-mainnet.matic.network"],
-    },
-    {
-      name: "Matic - Mumbai",
+      name: "OPN Testnet",
       network: "testnet",
-      rpc: ["https://rpc-mumbai.matic.today"],
+      rpc: [
+        "http://174.138.9.169:9650/ext/bc/VUKSzFZKckx4PoZF9gX5QAqLPxbLzvu1vcssPG5QuodaJtdHT/rpc",
+      ],
     },
   ]);
 
